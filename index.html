@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventaris Barang LAB TJKT SMKN 1 LIWA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .marquee {
+            overflow: hidden;
+            white-space: nowrap;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+        }
+        
+        .marquee-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scroll 25s linear infinite;
+            color: white;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        @keyframes scroll {
+            0% { transform: translate3d(100%, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .digital-clock {
+            font-family: 'Courier New', monospace;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+        
+        .card-hover:hover::before {
+            left: 100%;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+        }
+        
+        .login-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideInUp 0.8s ease-out;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-gradient:hover::before {
+            left: 100%;
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .table-modern {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .table-modern thead {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .table-modern tbody tr {
+            transition: all 0.3s ease;
+        }
+        
+        .table-modern tbody tr:hover {
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            transform: scale(1.01);
+        }
+        
+        .form-modern input, .form-modern select {
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .form-modern input:focus, .form-modern select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .notification {
+            animation: slideInRight 0.5s ease-out;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .page-title {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2);
+        }
+    </style>
+</head>
+<body class="h-full bg-gradient-to-br from-blue-50 to-indigo-100">
+    <!-- Header -->
+    <header class="bg-white shadow-lg">
+    </header>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-card max-w-md w-full space-y-8 p-8 mx-4">
+            <div class="text-center">
+                <div class="mb-6">
+                    <div class="w-20 h-20 mx-auto bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                        <span class="text-3xl text-white">🏫</span>
+                    </div>
+                </div>
+                <h2 class="text-3xl font-bold page-title mb-2">
+                    Login Administrator
+                </h2>
+                <p class="text-gray-600 font-medium">
+                    Inventaris Barang Peralatan LAB TJKT SMKN 1 LIWA
+                </p>
+            </div>
+            <form class="mt-8 space-y-6 form-modern" onsubmit="handleLogin(event)">
+                <div class="space-y-4">
+                    <div>
+                        <label for="username" class="block text-sm font-semibold text-gray-700 mb-2">Username</label>
+                        <input id="username" name="username" type="text" required 
+                               class="w-full px-4 py-3 border-2 border-gray-200 placeholder-gray-400 text-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" 
+                               placeholder="Masukkan username">
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+                        <input id="password" name="password" type="password" required 
+                               class="w-full px-4 py-3 border-2 border-gray-200 placeholder-gray-400 text-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" 
+                               placeholder="Masukkan password">
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" 
+                            class="btn-gradient w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white shadow-lg hover:shadow-xl transition-all duration-300">
+                        <span class="flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                            </svg>
+                            Masuk ke Sistem
+                        </span>
+                    </button>
+                </div>
+            </form>
+            <div class="text-center text-xs text-gray-500 mt-6">
+                <p>© 2024 SMKN 1 LIWA - Sistem Inventaris LAB TJKT</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="hidden gradient-bg min-h-full">
+        <!-- Navigation -->
+        <nav class="glass-effect shadow-2xl">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex justify-between items-center py-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
+                            <span class="text-2xl">📊</span>
+                        </div>
+                        <h1 class="text-2xl font-bold text-white drop-shadow-lg">Dashboard Inventaris</h1>
+                    </div>
+                    <div class="flex items-center space-x-6">
+                        <div class="digital-clock text-xl font-bold bg-white bg-opacity-20 px-4 py-2 rounded-full" id="digitalClock"></div>
+                        <button onclick="logout()" 
+                                class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                            <span class="flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                </svg>
+                                Logout
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto py-8 px-4">
+            <!-- Welcome Section -->
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-white mb-4 drop-shadow-lg">Selamat Datang di Sistem Inventaris</h2>
+                <p class="text-xl text-white opacity-90 drop-shadow">LAB TJKT SMKN 1 LIWA</p>
+            </div>
+
+            <!-- Marquee Text Below Welcome -->
+            <div class="marquee bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 mb-8">
+                <div class="marquee-text text-lg font-bold">
+                    INVENTARIS BARANG PERALATAN LAB TJKT SMKN 1 LIWA - Pembuat: Ahmad Subhan, S.Kom Guru TJKT SMKN 1 Liwa
+                </div>
+            </div>
+            
+            <!-- Menu Grid -->
+            <div id="menuGrid" class="flex flex-wrap justify-center gap-6 max-w-6xl mx-auto">
+                <div class="card-hover rounded-xl shadow-lg p-6 cursor-pointer transform transition-all duration-500 w-48 h-40" onclick="showPage('inputBarang')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-3">📦</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-2">Input Data Barang</h3>
+                        <p class="text-gray-600 text-xs">Tambah barang baru ke inventaris</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-xl shadow-lg p-6 cursor-pointer transform transition-all duration-500 w-48 h-40" onclick="showPage('hapusBarang')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-3">🗑️</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-2">Hapus Barang</h3>
+                        <p class="text-gray-600 text-xs">Hapus barang dari inventaris</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-xl shadow-lg p-6 cursor-pointer transform transition-all duration-500 w-48 h-40" onclick="showPage('databaseBarang')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-3">💾</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-2">Database Barang</h3>
+                        <p class="text-gray-600 text-xs">Lihat semua data barang</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-xl shadow-lg p-6 cursor-pointer transform transition-all duration-500 w-48 h-40" onclick="showPage('peminjamanBarang')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-3">📤</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-2">Peminjaman Barang</h3>
+                        <p class="text-gray-600 text-xs">Kelola peminjaman barang</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-xl shadow-lg p-6 cursor-pointer transform transition-all duration-500 w-48 h-40" onclick="showPage('pengembalianBarang')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-3">📥</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-2">Pengembalian Barang</h3>
+                        <p class="text-gray-600 text-xs">Proses pengembalian barang</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-xl shadow-lg p-6 cursor-pointer transform transition-all duration-500 w-48 h-40" onclick="showPage('cetakLaporan')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-3">📊</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-2">Cetak Laporan</h3>
+                        <p class="text-gray-600 text-xs">Export PDF & Excel</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-xl shadow-lg p-6 cursor-pointer transform transition-all duration-500 w-48 h-40" onclick="showPage('barangRusak')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-3">⚠️</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-2">Barang Rusak</h3>
+                        <p class="text-gray-600 text-xs">Daftar barang rusak</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-xl shadow-lg p-6 cursor-pointer transform transition-all duration-500 w-48 h-40" onclick="showPage('editBarang')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-3">✏️</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-2">Edit Barang</h3>
+                        <p class="text-gray-600 text-xs">Ubah data barang</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-xl shadow-lg p-6 cursor-pointer transform transition-all duration-500 w-48 h-40" onclick="showPage('pengaturan')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-3">⚙️</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-2">Pengaturan</h3>
+                        <p class="text-gray-600 text-xs">Konfigurasi sistem</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-xl shadow-lg p-6 cursor-pointer transform transition-all duration-500 w-48 h-40" onclick="showPage('importData')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-3">📁</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-2">Import Data</h3>
+                        <p class="text-gray-600 text-xs">Import & backup data</p>
+                    </div>
+                </div>
+                
+                <div class="card-hover rounded-xl shadow-lg p-6 cursor-pointer transform transition-all duration-500 w-48 h-40" onclick="showPage('profilPembuat')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-3">👤</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-2">Profil Pembuat</h3>
+                        <p class="text-gray-600 text-xs">Info developer</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Barang Page -->
+            <div id="inputBarang" class="hidden">
+                <div class="glass-effect rounded-2xl shadow-2xl p-8 mx-4">
+                    <div class="flex justify-between items-center mb-8">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
+                                <span class="text-2xl">📦</span>
+                            </div>
+                            <h2 class="text-3xl font-bold text-white drop-shadow-lg">Input Data Barang</h2>
+                        </div>
+                        <button onclick="showMenu()" class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-all duration-300 transform hover:scale-105">
+                            <span class="flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                                </svg>
+                                Kembali
+                            </span>
+                        </button>
+                    </div>
+                    
+                    <div class="bg-white bg-opacity-95 rounded-2xl p-8 shadow-inner">
+                        <form onsubmit="addBarang(event)" class="form-modern space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="namaBarang" class="block text-sm font-semibold text-gray-700 mb-3">Nama Barang</label>
+                                    <input type="text" id="namaBarang" required 
+                                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300"
+                                           placeholder="Masukkan nama barang">
+                                </div>
+                                <div>
+                                    <label for="kodeBarang" class="block text-sm font-semibold text-gray-700 mb-3">Kode Barang</label>
+                                    <input type="text" id="kodeBarang" required 
+                                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300"
+                                           placeholder="Masukkan kode barang">
+                                </div>
+                                <div>
+                                    <label for="seriBarang" class="block text-sm font-semibold text-gray-700 mb-3">Seri Barang</label>
+                                    <input type="text" id="seriBarang" required 
+                                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300"
+                                           placeholder="Masukkan seri barang">
+                                </div>
+                                <div>
+                                    <label for="kondisiBarang" class="block text-sm font-semibold text-gray-700 mb-3">Kondisi Barang</label>
+                                    <select id="kondisiBarang" required 
+                                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300">
+                                        <option value="">Pilih Kondisi</option>
+                                        <option value="Baik">Baik</option>
+                                        <option value="Rusak Ringan">Rusak Ringan</option>
+                                        <option value="Rusak Berat">Rusak Berat</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label for="jumlahBarang" class="block text-sm font-semibold text-gray-700 mb-3">Jumlah Barang</label>
+                                    <input type="number" id="jumlahBarang" required min="1" 
+                                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300"
+                                           placeholder="Masukkan jumlah barang">
+                                </div>
+                            </div>
+                            <button type="submit" 
+                                    class="btn-gradient w-full py-4 px-6 rounded-xl text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                                <span class="flex items-center justify-center">
+                                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                    Simpan Barang
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Database Barang Page -->
+            <div id="databaseBarang" class="hidden">
+                <div class="glass-effect rounded-2xl shadow-2xl p-8 mx-4">
+                    <div class="flex justify-between items-center mb-8">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
+                                <span class="text-2xl">💾</span>
+                            </div>
+                            <h2 class="text-3xl font-bold text-white drop-shadow-lg">Database Barang</h2>
+                        </div>
+                        <button onclick="showMenu()" class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-all duration-300 transform hover:scale-105">
+                            <span class="flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                                </svg>
+                                Kembali
+                            </span>
+                        </button>
+                    </div>
+                    
+                    <div class="bg-white bg-opacity-95 rounded-2xl p-8 shadow-inner">
+                        <div class="overflow-x-auto">
+                            <table class="table-modern min-w-full">
+                                <thead>
+                                    <tr>
+                                        <th class="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">Nama Barang</th>
+                                        <th class="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">Kode</th>
+                                        <th class="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">Seri</th>
+                                        <th class="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">Kondisi</th>
+                                        <th class="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">Jumlah</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="barangTableBody" class="bg-white divide-y divide-gray-100">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Peminjaman Barang Page -->
+            <div id="peminjamanBarang" class="hidden">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Peminjaman Barang</h2>
+                        <button onclick="showMenu()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                            Kembali
+                        </button>
+                    </div>
+                    
+                    <form onsubmit="addPeminjaman(event)" class="space-y-4 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="namaPeminjam" class="block text-sm font-medium text-gray-700 mb-2">Nama Peminjam</label>
+                                <input type="text" id="namaPeminjam" required 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label for="tanggalPinjam" class="block text-sm font-medium text-gray-700 mb-2">Tanggal Pinjam</label>
+                                <input type="date" id="tanggalPinjam" required 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label for="barangPinjam" class="block text-sm font-medium text-gray-700 mb-2">Pilih Barang</label>
+                                <select id="barangPinjam" required onchange="updateKodeBarang()" 
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option value="">Pilih Barang</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="kodeBarangPinjam" class="block text-sm font-medium text-gray-700 mb-2">Kode Barang</label>
+                                <input type="text" id="kodeBarangPinjam" readonly 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                            </div>
+                            <div>
+                                <label for="jumlahPinjam" class="block text-sm font-medium text-gray-700 mb-2">Jumlah Pinjam</label>
+                                <input type="number" id="jumlahPinjam" required min="1" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                        </div>
+                        <button type="submit" 
+                                class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md transition duration-200">
+                            Proses Peminjaman
+                        </button>
+                    </form>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full table-auto">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Peminjam</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barang</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
+                                </tr>
+                            </thead>
+                            <tbody id="peminjamanTableBody" class="bg-white divide-y divide-gray-200">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pengembalian Barang Page -->
+            <div id="pengembalianBarang" class="hidden">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Pengembalian Barang</h2>
+                        <button onclick="showMenu()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                            Kembali
+                        </button>
+                    </div>
+                    
+                    <form onsubmit="addPengembalian(event)" class="space-y-4 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="namaPengembalian" class="block text-sm font-medium text-gray-700 mb-2">Nama Pengembalian</label>
+                                <input type="text" id="namaPengembalian" required 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label for="tanggalKembali" class="block text-sm font-medium text-gray-700 mb-2">Tanggal Pengembalian</label>
+                                <input type="date" id="tanggalKembali" required 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label for="kodeBarangKembali" class="block text-sm font-medium text-gray-700 mb-2">Kode Barang</label>
+                                <select id="kodeBarangKembali" required 
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option value="">Pilih Kode Barang</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="jumlahKembali" class="block text-sm font-medium text-gray-700 mb-2">Jumlah Kembali</label>
+                                <input type="number" id="jumlahKembali" required min="1" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                        </div>
+                        <button type="submit" 
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition duration-200">
+                            Proses Pengembalian
+                        </button>
+                    </form>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full table-auto">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode Barang</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pengembalianTableBody" class="bg-white divide-y divide-gray-200">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cetak Laporan Page -->
+            <div id="cetakLaporan" class="hidden">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Cetak Laporan</h2>
+                        <button onclick="showMenu()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                            Kembali
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold mb-4">Laporan Data Barang</h3>
+                            <div class="space-y-2">
+                                <button onclick="cetakPDF('barang')" 
+                                        class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md">
+                                    Cetak PDF
+                                </button>
+                                <button onclick="cetakExcel('barang')" 
+                                        class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md">
+                                    Cetak Excel
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold mb-4">Laporan Peminjaman</h3>
+                            <div class="space-y-2">
+                                <button onclick="cetakPDF('peminjaman')" 
+                                        class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md">
+                                    Cetak PDF
+                                </button>
+                                <button onclick="cetakExcel('peminjaman')" 
+                                        class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md">
+                                    Cetak Excel
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold mb-4">Laporan Barang Rusak</h3>
+                            <div class="space-y-2">
+                                <button onclick="cetakPDF('rusak')" 
+                                        class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md">
+                                    Cetak PDF
+                                </button>
+                                <button onclick="cetakExcel('rusak')" 
+                                        class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md">
+                                    Cetak Excel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hapus Barang Page -->
+            <div id="hapusBarang" class="hidden">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Hapus Barang</h2>
+                        <button onclick="showMenu()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                            Kembali
+                        </button>
+                    </div>
+                    
+                    <form onsubmit="hapusBarang(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="namaBarangHapus" class="block text-sm font-medium text-gray-700 mb-2">Nama Barang</label>
+                                <select id="namaBarangHapus" required onchange="updateSeriHapus()" 
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option value="">Pilih Barang</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="seriBarangHapus" class="block text-sm font-medium text-gray-700 mb-2">Seri Barang</label>
+                                <input type="text" id="seriBarangHapus" readonly 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                            </div>
+                        </div>
+                        <button type="submit" 
+                                class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md transition duration-200">
+                            Hapus Barang
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Edit Barang Page -->
+            <div id="editBarang" class="hidden">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Edit Barang</h2>
+                        <button onclick="showMenu()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                            Kembali
+                        </button>
+                    </div>
+                    
+                    <form onsubmit="editBarang(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="pilihBarangEdit" class="block text-sm font-medium text-gray-700 mb-2">Pilih Barang untuk Edit</label>
+                                <select id="pilihBarangEdit" required onchange="loadBarangEdit()" 
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option value="">Pilih Barang</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="namaBarangEdit" class="block text-sm font-medium text-gray-700 mb-2">Nama Barang Baru</label>
+                                <input type="text" id="namaBarangEdit" required 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label for="kodeBarangEdit" class="block text-sm font-medium text-gray-700 mb-2">Kode Barang Baru</label>
+                                <input type="text" id="kodeBarangEdit" required 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                        </div>
+                        <button type="submit" 
+                                class="w-full bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-md transition duration-200">
+                            Update Barang
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Pengaturan Page -->
+            <div id="pengaturan" class="hidden">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Pengaturan</h2>
+                        <button onclick="showMenu()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                            Kembali
+                        </button>
+                    </div>
+                    
+                    <form onsubmit="simpanPengaturan(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="tanggalLaporan" class="block text-sm font-medium text-gray-700 mb-2">Tanggal Laporan</label>
+                                <input type="date" id="tanggalLaporan" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label for="namaKajur" class="block text-sm font-medium text-gray-700 mb-2">Nama Kajur</label>
+                                <input type="text" id="namaKajur" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label for="nipKajur" class="block text-sm font-medium text-gray-700 mb-2">NIP Kajur</label>
+                                <input type="text" id="nipKajur" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label for="logoLaporan" class="block text-sm font-medium text-gray-700 mb-2">Logo Laporan</label>
+                                <input type="file" id="logoLaporan" accept="image/*" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                        </div>
+                        <button type="submit" 
+                                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md transition duration-200">
+                            Simpan Pengaturan
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Import Data Page -->
+            <div id="importData" class="hidden">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Import & Backup Data</h2>
+                        <button onclick="showMenu()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                            Kembali
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold mb-4">Import Data dari Excel</h3>
+                            <input type="file" id="importFile" accept=".xlsx,.xls" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md mb-4">
+                            <button onclick="importFromExcel()" 
+                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md">
+                                Import Data
+                            </button>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold mb-4">Backup & Restore</h3>
+                            <div class="space-y-2">
+                                <button onclick="backupData()" 
+                                        class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md">
+                                    Backup Data
+                                </button>
+                                <input type="file" id="restoreFile" accept=".json" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                                <button onclick="restoreData()" 
+                                        class="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded-md">
+                                    Restore Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profil Pembuat Page -->
+            <div id="profilPembuat" class="hidden">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Profil Pembuat</h2>
+                        <button onclick="showMenu()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                            Kembali
+                        </button>
+                    </div>
+                    
+                    <div class="max-w-2xl mx-auto">
+                        <div class="text-center mb-6">
+                            <div class="w-32 h-32 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                                <img id="profilePhoto" src="" alt="Foto Profil" class="w-full h-full object-cover hidden">
+                                <span id="photoPlaceholder" class="text-4xl">👤</span>
+                            </div>
+                            <input type="file" id="uploadPhoto" accept="image/*" onchange="uploadProfilePhoto()" 
+                                   class="mb-4">
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h3 class="font-semibold text-gray-800">Nama:</h3>
+                                <p class="text-gray-600">AHMAD SUBHAN, S.Kom</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h3 class="font-semibold text-gray-800">Jabatan:</h3>
+                                <p class="text-gray-600">Guru TJKT SMKN 1 LIWA</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h3 class="font-semibold text-gray-800">Alamat:</h3>
+                                <p class="text-gray-600">DESA SUMBER ALAM KEC. Air Hitam Kabupaten Lampung Barat</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h3 class="font-semibold text-gray-800">Email:</h3>
+                                <p class="text-gray-600">ahmadsubhanbagus@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barang Rusak Page -->
+            <div id="barangRusak" class="hidden">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Barang Rusak</h2>
+                        <button onclick="showMenu()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                            Kembali
+                        </button>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full table-auto">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Barang</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Seri</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Rusak</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
+                                </tr>
+                            </thead>
+                            <tbody id="barangRusakTableBody" class="bg-white divide-y divide-gray-200">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Data Storage
+        let barangData = JSON.parse(localStorage.getItem('barangData')) || [];
+        let peminjamanData = JSON.parse(localStorage.getItem('peminjamanData')) || [];
+        let pengembalianData = JSON.parse(localStorage.getItem('pengembalianData')) || [];
+        let barangRusakData = JSON.parse(localStorage.getItem('barangRusakData')) || [];
+        let pengaturanData = JSON.parse(localStorage.getItem('pengaturanData')) || {};
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateClock();
+            setInterval(updateClock, 1000);
+            
+            // Set default date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tanggalPinjam').value = today;
+            document.getElementById('tanggalKembali').value = today;
+            
+            loadPengaturan();
+        });
+
+        // Clock function
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('id-ID');
+            const dateString = now.toLocaleDateString('id-ID');
+            document.getElementById('digitalClock').textContent = `${timeString} | ${dateString}`;
+        }
+
+        // Login function
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === 'Admin' && password === '1234') {
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                showMenu();
+            } else {
+                showNotification('Username atau password salah!', 'error');
+            }
+        }
+
+        // Logout function
+        function logout() {
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // Navigation functions
+        function showMenu() {
+            // Hide all pages
+            const pages = ['inputBarang', 'databaseBarang', 'peminjamanBarang', 'pengembalianBarang', 
+                          'cetakLaporan', 'hapusBarang', 'editBarang', 'pengaturan', 'importData', 
+                          'profilPembuat', 'barangRusak'];
+            pages.forEach(page => {
+                document.getElementById(page).classList.add('hidden');
+            });
+            
+            // Show menu grid
+            document.getElementById('menuGrid').classList.remove('hidden');
+            
+            // Update dropdowns
+            updateBarangDropdowns();
+        }
+
+        function showPage(pageId) {
+            document.getElementById('menuGrid').classList.add('hidden');
+            document.getElementById(pageId).classList.remove('hidden');
+            
+            // Update specific page data
+            if (pageId === 'databaseBarang') {
+                updateBarangTable();
+            } else if (pageId === 'peminjamanBarang') {
+                updatePeminjamanTable();
+                updateBarangDropdowns();
+            } else if (pageId === 'pengembalianBarang') {
+                updatePengembalianTable();
+                updateKodeBarangDropdown();
+            } else if (pageId === 'barangRusak') {
+                updateBarangRusakTable();
+            }
+        }
+
+        // Barang functions
+        function addBarang(event) {
+            event.preventDefault();
+            
+            const barang = {
+                id: Date.now(),
+                nama: document.getElementById('namaBarang').value,
+                kode: document.getElementById('kodeBarang').value,
+                seri: document.getElementById('seriBarang').value,
+                kondisi: document.getElementById('kondisiBarang').value,
+                jumlah: parseInt(document.getElementById('jumlahBarang').value)
+            };
+            
+            barangData.push(barang);
+            localStorage.setItem('barangData', JSON.stringify(barangData));
+            
+            showNotification('Barang berhasil ditambahkan!', 'success');
+            event.target.reset();
+            updateBarangTable();
+        }
+
+        function updateBarangTable() {
+            const tbody = document.getElementById('barangTableBody');
+            tbody.innerHTML = '';
+            
+            barangData.forEach(barang => {
+                const row = `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${barang.nama}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${barang.kode}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${barang.seri}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${barang.kondisi}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${barang.jumlah}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function updateBarangDropdowns() {
+            const selects = ['barangPinjam', 'namaBarangHapus', 'pilihBarangEdit'];
+            
+            selects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                if (select) {
+                    select.innerHTML = '<option value="">Pilih Barang</option>';
+                    barangData.forEach(barang => {
+                        select.innerHTML += `<option value="${barang.id}">${barang.nama}</option>`;
+                    });
+                }
+            });
+        }
+
+        function updateKodeBarang() {
+            const selectedId = document.getElementById('barangPinjam').value;
+            const barang = barangData.find(b => b.id == selectedId);
+            document.getElementById('kodeBarangPinjam').value = barang ? barang.kode : '';
+        }
+
+        function updateSeriHapus() {
+            const selectedId = document.getElementById('namaBarangHapus').value;
+            const barang = barangData.find(b => b.id == selectedId);
+            document.getElementById('seriBarangHapus').value = barang ? barang.seri : '';
+        }
+
+        function loadBarangEdit() {
+            const selectedId = document.getElementById('pilihBarangEdit').value;
+            const barang = barangData.find(b => b.id == selectedId);
+            if (barang) {
+                document.getElementById('namaBarangEdit').value = barang.nama;
+                document.getElementById('kodeBarangEdit').value = barang.kode;
+            }
+        }
+
+        // Peminjaman functions
+        function addPeminjaman(event) {
+            event.preventDefault();
+            
+            const barangId = document.getElementById('barangPinjam').value;
+            const jumlahPinjam = parseInt(document.getElementById('jumlahPinjam').value);
+            
+            const barang = barangData.find(b => b.id == barangId);
+            if (!barang || barang.jumlah < jumlahPinjam) {
+                showNotification('Stok barang tidak mencukupi!', 'error');
+                return;
+            }
+            
+            const peminjaman = {
+                id: Date.now(),
+                nama: document.getElementById('namaPeminjam').value,
+                tanggal: document.getElementById('tanggalPinjam').value,
+                barang: barang.nama,
+                kode: barang.kode,
+                jumlah: jumlahPinjam
+            };
+            
+            // Update stok barang
+            barang.jumlah -= jumlahPinjam;
+            
+            peminjamanData.push(peminjaman);
+            localStorage.setItem('barangData', JSON.stringify(barangData));
+            localStorage.setItem('peminjamanData', JSON.stringify(peminjamanData));
+            
+            showNotification('Peminjaman berhasil diproses!', 'success');
+            event.target.reset();
+            updatePeminjamanTable();
+            updateBarangTable();
+        }
+
+        function updatePeminjamanTable() {
+            const tbody = document.getElementById('peminjamanTableBody');
+            tbody.innerHTML = '';
+            
+            peminjamanData.forEach(peminjaman => {
+                const row = `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${peminjaman.nama}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${peminjaman.tanggal}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${peminjaman.barang}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${peminjaman.kode}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${peminjaman.jumlah}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        // Pengembalian functions
+        function updateKodeBarangDropdown() {
+            const select = document.getElementById('kodeBarangKembali');
+            select.innerHTML = '<option value="">Pilih Kode Barang</option>';
+            
+            const uniqueCodes = [...new Set(peminjamanData.map(p => p.kode))];
+            uniqueCodes.forEach(kode => {
+                select.innerHTML += `<option value="${kode}">${kode}</option>`;
+            });
+        }
+
+        function addPengembalian(event) {
+            event.preventDefault();
+            
+            const kodeBarang = document.getElementById('kodeBarangKembali').value;
+            const jumlahKembali = parseInt(document.getElementById('jumlahKembali').value);
+            
+            const pengembalian = {
+                id: Date.now(),
+                nama: document.getElementById('namaPengembalian').value,
+                tanggal: document.getElementById('tanggalKembali').value,
+                kode: kodeBarang,
+                jumlah: jumlahKembali
+            };
+            
+            // Update stok barang
+            const barang = barangData.find(b => b.kode === kodeBarang);
+            if (barang) {
+                barang.jumlah += jumlahKembali;
+            }
+            
+            pengembalianData.push(pengembalian);
+            localStorage.setItem('barangData', JSON.stringify(barangData));
+            localStorage.setItem('pengembalianData', JSON.stringify(pengembalianData));
+            
+            showNotification('Pengembalian berhasil diproses!', 'success');
+            event.target.reset();
+            updatePengembalianTable();
+            updateBarangTable();
+        }
+
+        function updatePengembalianTable() {
+            const tbody = document.getElementById('pengembalianTableBody');
+            tbody.innerHTML = '';
+            
+            pengembalianData.forEach(pengembalian => {
+                const row = `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${pengembalian.nama}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${pengembalian.tanggal}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${pengembalian.kode}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${pengembalian.jumlah}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        // Hapus Barang function
+        function hapusBarang(event) {
+            event.preventDefault();
+            
+            const selectedId = document.getElementById('namaBarangHapus').value;
+            const barangIndex = barangData.findIndex(b => b.id == selectedId);
+            
+            if (barangIndex !== -1) {
+                const barang = barangData[barangIndex];
+                
+                // Pindah ke barang rusak
+                const barangRusak = {
+                    ...barang,
+                    tanggalRusak: new Date().toISOString().split('T')[0]
+                };
+                barangRusakData.push(barangRusak);
+                
+                // Hapus dari database barang
+                barangData.splice(barangIndex, 1);
+                
+                localStorage.setItem('barangData', JSON.stringify(barangData));
+                localStorage.setItem('barangRusakData', JSON.stringify(barangRusakData));
+                
+                showNotification('Barang berhasil dihapus dan dipindah ke barang rusak!', 'success');
+                event.target.reset();
+                updateBarangTable();
+                updateBarangDropdowns();
+            }
+        }
+
+        // Edit Barang function
+        function editBarang(event) {
+            event.preventDefault();
+            
+            const selectedId = document.getElementById('pilihBarangEdit').value;
+            const barang = barangData.find(b => b.id == selectedId);
+            
+            if (barang) {
+                barang.nama = document.getElementById('namaBarangEdit').value;
+                barang.kode = document.getElementById('kodeBarangEdit').value;
+                
+                localStorage.setItem('barangData', JSON.stringify(barangData));
+                
+                showNotification('Barang berhasil diupdate!', 'success');
+                event.target.reset();
+                updateBarangTable();
+                updateBarangDropdowns();
+            }
+        }
+
+        // Barang Rusak function
+        function updateBarangRusakTable() {
+            const tbody = document.getElementById('barangRusakTableBody');
+            tbody.innerHTML = '';
+            
+            barangRusakData.forEach(barang => {
+                const row = `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${barang.nama}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${barang.kode}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${barang.seri}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${barang.tanggalRusak}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${barang.jumlah}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        // Pengaturan functions
+        function simpanPengaturan(event) {
+            event.preventDefault();
+            
+            pengaturanData = {
+                tanggalLaporan: document.getElementById('tanggalLaporan').value,
+                namaKajur: document.getElementById('namaKajur').value,
+                nipKajur: document.getElementById('nipKajur').value
+            };
+            
+            // Handle logo upload
+            const logoFile = document.getElementById('logoLaporan').files[0];
+            if (logoFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    localStorage.setItem('logoLaporan', e.target.result);
+                    showNotification('Pengaturan dan logo berhasil disimpan!', 'success');
+                };
+                reader.readAsDataURL(logoFile);
+            } else {
+                showNotification('Pengaturan berhasil disimpan!', 'success');
+            }
+            
+            localStorage.setItem('pengaturanData', JSON.stringify(pengaturanData));
+        }
+
+        function loadPengaturan() {
+            if (pengaturanData.tanggalLaporan) {
+                document.getElementById('tanggalLaporan').value = pengaturanData.tanggalLaporan;
+            }
+            if (pengaturanData.namaKajur) {
+                document.getElementById('namaKajur').value = pengaturanData.namaKajur;
+            }
+            if (pengaturanData.nipKajur) {
+                document.getElementById('nipKajur').value = pengaturanData.nipKajur;
+            }
+        }
+
+        // Print functions
+        function cetakPDF(type) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Colors
+            const primaryColor = [0, 0, 0]; // Black for professional look
+            const textColor = [0, 0, 0]; // Black text
+            const lightGray = [248, 248, 248]; // Very light gray
+            const borderColor = [200, 200, 200]; // Light border
+            
+            let yPos = 20;
+            
+            // Clean Header with Logo
+            const savedLogo = localStorage.getItem('logoLaporan');
+            if (savedLogo) {
+                try {
+                    // Detect image format from base64 string
+                    let format = 'JPEG';
+                    if (savedLogo.includes('data:image/png')) {
+                        format = 'PNG';
+                    } else if (savedLogo.includes('data:image/gif')) {
+                        format = 'GIF';
+                    } else if (savedLogo.includes('data:image/webp')) {
+                        format = 'WEBP';
+                    }
+                    
+                    doc.addImage(savedLogo, format, 20, yPos - 5, 25, 25);
+                } catch (e) {
+                    console.log('Error loading logo:', e);
+                    // If logo fails, show placeholder text
+                    doc.setFontSize(8);
+                    doc.setTextColor(150, 150, 150);
+                    doc.text('[LOGO]', 20, yPos + 10);
+                }
+            } else {
+                // Show placeholder if no logo is set
+                doc.setFontSize(8);
+                doc.setTextColor(150, 150, 150);
+                doc.text('[LOGO]', 20, yPos + 10);
+            }
+            
+            doc.setTextColor(...textColor);
+            doc.setFontSize(18);
+            doc.setFont('helvetica', 'bold');
+            doc.text('INVENTARIS BARANG LAB TJKT', 105, yPos, { align: 'center' });
+            
+            yPos += 8;
+            doc.setFontSize(16);
+            doc.text('SMKN 1 LIWA', 105, yPos, { align: 'center' });
+            
+            yPos += 6;
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Jl. Raya Liwa - Ranau, Liwa, Lampung Barat', 105, yPos, { align: 'center' });
+            
+            yPos += 15;
+            
+            // Double line separator
+            doc.setDrawColor(...primaryColor);
+            doc.setLineWidth(1);
+            doc.line(20, yPos, 190, yPos);
+            doc.setLineWidth(0.3);
+            doc.line(20, yPos + 2, 190, yPos + 2);
+            
+            yPos += 15;
+            
+            // Report Title
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            const subtitle = type === 'barang' ? 'LAPORAN DATA BARANG' : 
+                           type === 'peminjaman' ? 'LAPORAN PEMINJAMAN BARANG' : 
+                           'LAPORAN BARANG RUSAK';
+            doc.text(subtitle, 105, yPos, { align: 'center' });
+            
+            yPos += 15;
+            
+            // Date and info in clean format
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Tanggal Cetak: ${new Date().toLocaleDateString('id-ID')}`, 20, yPos);
+            doc.text(`Waktu: ${new Date().toLocaleTimeString('id-ID')}`, 140, yPos);
+            
+            yPos += 15;
+            
+            // Table setup
+            const pageWidth = 210;
+            const margin = 20;
+            const tableWidth = pageWidth - (margin * 2);
+            
+            if (type === 'barang') {
+                // Table headers
+                const headers = ['No', 'Nama Barang', 'Kode', 'Seri', 'Kondisi', 'Jumlah'];
+                const colWidths = [15, 40, 20, 50, 25, 20];
+                
+                // Clean header with border only
+                doc.setDrawColor(...borderColor);
+                doc.setLineWidth(0.5);
+                doc.rect(margin, yPos - 5, tableWidth, 12);
+                
+                // Header text - black on white
+                doc.setTextColor(...textColor);
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'bold');
+                
+                let xPos = margin + 2;
+                headers.forEach((header, index) => {
+                    doc.text(header, xPos, yPos + 2);
+                    xPos += colWidths[index];
+                });
+                
+                // Draw column separators
+                xPos = margin;
+                colWidths.forEach((width, index) => {
+                    if (index > 0) {
+                        doc.line(xPos, yPos - 5, xPos, yPos + 7);
+                    }
+                    xPos += width;
+                });
+                
+                yPos += 15;
+                
+                // Table rows
+                doc.setTextColor(...textColor);
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(9);
+                
+                barangData.forEach((barang, index) => {
+                    // Clean alternating rows with subtle gray
+                    if (index % 2 === 0) {
+                        doc.setFillColor(...lightGray);
+                        doc.rect(margin, yPos - 3, tableWidth, 10, 'F');
+                    }
+                    
+                    // Row border
+                    doc.setDrawColor(...borderColor);
+                    doc.setLineWidth(0.3);
+                    doc.rect(margin, yPos - 3, tableWidth, 10);
+                    
+                    xPos = margin + 2;
+                    const rowData = [
+                        (index + 1).toString(),
+                        barang.nama.length > 25 ? barang.nama.substring(0, 25) + '...' : barang.nama,
+                        barang.kode,
+                        barang.seri,
+                        barang.kondisi,
+                        barang.jumlah.toString()
+                    ];
+                    
+                    rowData.forEach((data, colIndex) => {
+                        doc.text(data, xPos, yPos + 2);
+                        xPos += colWidths[colIndex];
+                    });
+                    
+                    // Draw column separators for each row
+                    xPos = margin;
+                    colWidths.forEach((width, colIndex) => {
+                        if (colIndex > 0) {
+                            doc.line(xPos, yPos - 3, xPos, yPos + 7);
+                        }
+                        xPos += width;
+                    });
+                    
+                    yPos += 10;
+                    
+                    // New page if needed
+                    if (yPos > 250) {
+                        doc.addPage();
+                        yPos = 30;
+                    }
+                });
+                
+            } else if (type === 'peminjaman') {
+                // Table headers
+                const headers = ['No', 'Nama Peminjam', 'Tanggal', 'Barang', 'Kode', 'Jumlah'];
+                const colWidths = [15, 40, 25, 45, 25, 20];
+                
+                // Clean header with border only
+                doc.setDrawColor(...borderColor);
+                doc.setLineWidth(0.5);
+                doc.rect(margin, yPos - 5, tableWidth, 12);
+                
+                // Header text - black on white
+                doc.setTextColor(...textColor);
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'bold');
+                
+                let xPos = margin + 2;
+                headers.forEach((header, index) => {
+                    doc.text(header, xPos, yPos + 2);
+                    xPos += colWidths[index];
+                });
+                
+                // Draw column separators
+                xPos = margin;
+                colWidths.forEach((width, index) => {
+                    if (index > 0) {
+                        doc.line(xPos, yPos - 5, xPos, yPos + 7);
+                    }
+                    xPos += width;
+                });
+                
+                yPos += 15;
+                
+                // Table rows
+                doc.setTextColor(...textColor);
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(9);
+                
+                peminjamanData.forEach((peminjaman, index) => {
+                    // Clean alternating rows with subtle gray
+                    if (index % 2 === 0) {
+                        doc.setFillColor(...lightGray);
+                        doc.rect(margin, yPos - 3, tableWidth, 10, 'F');
+                    }
+                    
+                    // Row border
+                    doc.setDrawColor(...borderColor);
+                    doc.setLineWidth(0.3);
+                    doc.rect(margin, yPos - 3, tableWidth, 10);
+                    
+                    xPos = margin + 2;
+                    const rowData = [
+                        (index + 1).toString(),
+                        peminjaman.nama.length > 18 ? peminjaman.nama.substring(0, 18) + '...' : peminjaman.nama,
+                        peminjaman.tanggal,
+                        peminjaman.barang.length > 22 ? peminjaman.barang.substring(0, 22) + '...' : peminjaman.barang,
+                        peminjaman.kode,
+                        peminjaman.jumlah.toString()
+                    ];
+                    
+                    rowData.forEach((data, colIndex) => {
+                        doc.text(data, xPos, yPos + 2);
+                        xPos += colWidths[colIndex];
+                    });
+                    
+                    // Draw column separators for each row
+                    xPos = margin;
+                    colWidths.forEach((width, colIndex) => {
+                        if (colIndex > 0) {
+                            doc.line(xPos, yPos - 3, xPos, yPos + 7);
+                        }
+                        xPos += width;
+                    });
+                    
+                    yPos += 10;
+                    
+                    // New page if needed
+                    if (yPos > 250) {
+                        doc.addPage();
+                        yPos = 30;
+                    }
+                });
+                
+            } else if (type === 'rusak') {
+                // Table headers
+                const headers = ['No', 'Nama Barang', 'Kode', 'Seri', 'Tgl Rusak', 'Jumlah'];
+                const colWidths = [15, 35, 20, 50, 25, 25];
+                
+                // Clean header with border only
+                doc.setDrawColor(...borderColor);
+                doc.setLineWidth(0.5);
+                doc.rect(margin, yPos - 5, tableWidth, 12);
+                
+                // Header text - black on white
+                doc.setTextColor(...textColor);
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'bold');
+                
+                let xPos = margin + 2;
+                headers.forEach((header, index) => {
+                    doc.text(header, xPos, yPos + 2);
+                    xPos += colWidths[index];
+                });
+                
+                // Draw column separators
+                xPos = margin;
+                colWidths.forEach((width, index) => {
+                    if (index > 0) {
+                        doc.line(xPos, yPos - 5, xPos, yPos + 7);
+                    }
+                    xPos += width;
+                });
+                
+                yPos += 15;
+                
+                // Table rows
+                doc.setTextColor(...textColor);
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(9);
+                
+                barangRusakData.forEach((barang, index) => {
+                    // Clean alternating rows with subtle gray
+                    if (index % 2 === 0) {
+                        doc.setFillColor(...lightGray);
+                        doc.rect(margin, yPos - 3, tableWidth, 10, 'F');
+                    }
+                    
+                    // Row border
+                    doc.setDrawColor(...borderColor);
+                    doc.setLineWidth(0.3);
+                    doc.rect(margin, yPos - 3, tableWidth, 10);
+                    
+                    xPos = margin + 2;
+                    const rowData = [
+                        (index + 1).toString(),
+                        barang.nama.length > 22 ? barang.nama.substring(0, 22) + '...' : barang.nama,
+                        barang.kode,
+                        barang.seri,
+                        barang.tanggalRusak,
+                        barang.jumlah.toString()
+                    ];
+                    
+                    rowData.forEach((data, colIndex) => {
+                        doc.text(data, xPos, yPos + 2);
+                        xPos += colWidths[colIndex];
+                    });
+                    
+                    // Draw column separators for each row
+                    xPos = margin;
+                    colWidths.forEach((width, colIndex) => {
+                        if (colIndex > 0) {
+                            doc.line(xPos, yPos - 3, xPos, yPos + 7);
+                        }
+                        xPos += width;
+                    });
+                    
+                    yPos += 10;
+                    
+                    // New page if needed
+                    if (yPos > 250) {
+                        doc.addPage();
+                        yPos = 30;
+                    }
+                });
+            }
+            
+            // Clean Summary box
+            yPos += 15;
+            doc.setDrawColor(...borderColor);
+            doc.setLineWidth(0.5);
+            doc.rect(margin, yPos, tableWidth, 25);
+            
+            doc.setTextColor(...textColor);
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.text('RINGKASAN LAPORAN', margin + 5, yPos + 8);
+            
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            let totalItems = 0;
+            if (type === 'barang') {
+                totalItems = barangData.reduce((sum, item) => sum + item.jumlah, 0);
+                doc.text(`Total Jenis Barang: ${barangData.length} jenis`, margin + 5, yPos + 16);
+                doc.text(`Total Jumlah Barang: ${totalItems} unit`, margin + 5, yPos + 22);
+            } else if (type === 'peminjaman') {
+                totalItems = peminjamanData.reduce((sum, item) => sum + item.jumlah, 0);
+                doc.text(`Total Transaksi Peminjaman: ${peminjamanData.length} transaksi`, margin + 5, yPos + 16);
+                doc.text(`Total Barang Dipinjam: ${totalItems} unit`, margin + 5, yPos + 22);
+            } else if (type === 'rusak') {
+                totalItems = barangRusakData.reduce((sum, item) => sum + item.jumlah, 0);
+                doc.text(`Total Jenis Barang Rusak: ${barangRusakData.length} jenis`, margin + 5, yPos + 16);
+                doc.text(`Total Jumlah Barang Rusak: ${totalItems} unit`, margin + 5, yPos + 22);
+            }
+            
+            // Clean Footer with signature
+            yPos += 40;
+            if (yPos > 240) {
+                doc.addPage();
+                yPos = 30;
+            }
+            
+            // Single column layout for signature - only Kepala Jurusan
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Liwa, ${new Date().toLocaleDateString('id-ID')}`, 130, yPos);
+            doc.text('Mengetahui,', 130, yPos + 8);
+            doc.text('Kepala Jurusan TJKT', 130, yPos + 16);
+            
+            doc.setFont('helvetica', 'bold');
+            doc.text(pengaturanData.namaKajur || '(Nama Kajur)', 130, yPos + 35);
+            
+            // Signature space
+            doc.setDrawColor(...borderColor);
+            doc.setLineWidth(0.3);
+            doc.line(130, yPos + 42, 180, yPos + 42);
+            
+            doc.setFont('helvetica', 'normal');
+            doc.text(`NIP. ${pengaturanData.nipKajur || '(NIP Kajur)'}`, 130, yPos + 48);
+            
+            // Clean page numbers and footer
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.setTextColor(100, 100, 100);
+                doc.text(`Halaman ${i} dari ${pageCount}`, 105, 285, { align: 'center' });
+                doc.text('Sistem Inventaris LAB TJKT SMKN 1 LIWA', 105, 290, { align: 'center' });
+            }
+            
+            doc.save(`laporan-${type}-${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function cetakExcel(type) {
+            let data = [];
+            let headers = [];
+            
+            if (type === 'barang') {
+                headers = ['No', 'Nama Barang', 'Kode', 'Seri', 'Kondisi', 'Jumlah'];
+                data = barangData.map((barang, index) => [
+                    index + 1, barang.nama, barang.kode, barang.seri, barang.kondisi, barang.jumlah
+                ]);
+            } else if (type === 'peminjaman') {
+                headers = ['No', 'Nama', 'Tanggal', 'Barang', 'Kode', 'Jumlah'];
+                data = peminjamanData.map((peminjaman, index) => [
+                    index + 1, peminjaman.nama, peminjaman.tanggal, peminjaman.barang, peminjaman.kode, peminjaman.jumlah
+                ]);
+            } else if (type === 'rusak') {
+                headers = ['No', 'Nama Barang', 'Kode', 'Seri', 'Tanggal Rusak', 'Jumlah'];
+                data = barangRusakData.map((barang, index) => [
+                    index + 1, barang.nama, barang.kode, barang.seri, barang.tanggalRusak, barang.jumlah
+                ]);
+            }
+            
+            const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, `Laporan ${type}`);
+            XLSX.writeFile(wb, `laporan-${type}-${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
+
+        // Import/Export functions
+        function importFromExcel() {
+            const file = document.getElementById('importFile').files[0];
+            if (!file) {
+                showNotification('Pilih file Excel terlebih dahulu!', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+                
+                // Skip header row
+                const importedData = jsonData.slice(1).map(row => ({
+                    id: Date.now() + Math.random(),
+                    nama: row[1] || '',
+                    kode: row[2] || '',
+                    seri: row[3] || '',
+                    kondisi: row[4] || 'Baik',
+                    jumlah: parseInt(row[5]) || 0
+                }));
+                
+                barangData = [...barangData, ...importedData];
+                localStorage.setItem('barangData', JSON.stringify(barangData));
+                
+                showNotification('Data berhasil diimport!', 'success');
+                updateBarangTable();
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function backupData() {
+            const backup = {
+                barangData,
+                peminjamanData,
+                pengembalianData,
+                barangRusakData,
+                pengaturanData,
+                timestamp: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(backup, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `backup-inventaris-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            showNotification('Backup berhasil dibuat!', 'success');
+        }
+
+        function restoreData() {
+            const file = document.getElementById('restoreFile').files[0];
+            if (!file) {
+                showNotification('Pilih file backup terlebih dahulu!', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const backup = JSON.parse(e.target.result);
+                    
+                    barangData = backup.barangData || [];
+                    peminjamanData = backup.peminjamanData || [];
+                    pengembalianData = backup.pengembalianData || [];
+                    barangRusakData = backup.barangRusakData || [];
+                    pengaturanData = backup.pengaturanData || {};
+                    
+                    localStorage.setItem('barangData', JSON.stringify(barangData));
+                    localStorage.setItem('peminjamanData', JSON.stringify(peminjamanData));
+                    localStorage.setItem('pengembalianData', JSON.stringify(pengembalianData));
+                    localStorage.setItem('barangRusakData', JSON.stringify(barangRusakData));
+                    localStorage.setItem('pengaturanData', JSON.stringify(pengaturanData));
+                    
+                    showNotification('Data berhasil direstore!', 'success');
+                    loadPengaturan();
+                    updateBarangTable();
+                } catch (error) {
+                    showNotification('File backup tidak valid!', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Profile photo function
+        function uploadProfilePhoto() {
+            const file = document.getElementById('uploadPhoto').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profilePhoto').src = e.target.result;
+                    document.getElementById('profilePhoto').classList.remove('hidden');
+                    document.getElementById('photoPlaceholder').classList.add('hidden');
+                    localStorage.setItem('profilePhoto', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Load profile photo on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedPhoto = localStorage.getItem('profilePhoto');
+            if (savedPhoto) {
+                document.getElementById('profilePhoto').src = savedPhoto;
+                document.getElementById('profilePhoto').classList.remove('hidden');
+                document.getElementById('photoPlaceholder').classList.add('hidden');
+            }
+        });
+
+        // Notification function
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification fixed top-6 right-6 p-6 text-white z-50 max-w-sm shadow-2xl ${
+                type === 'success' 
+                    ? 'bg-gradient-to-r from-green-500 to-emerald-600' 
+                    : 'bg-gradient-to-r from-red-500 to-pink-600'
+            }`;
+            
+            const icon = type === 'success' ? '✅' : '❌';
+            notification.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl">${icon}</span>
+                    <div>
+                        <p class="font-semibold">${type === 'success' ? 'Berhasil!' : 'Error!'}</p>
+                        <p class="text-sm opacity-90">${message}</p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 4000);
+            
+            // Click to dismiss
+            notification.addEventListener('click', () => {
+                notification.style.transform = 'translateX(100%)';
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            });
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99015ccd3735959b',t:'MTc2MDcyMDUzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
